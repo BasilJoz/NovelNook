@@ -29,7 +29,7 @@ def handlelogin(request):
                 
         
     # return render(request,'usertemplate/login.html')
-def handlsignup(request):
+def handlesignup(request):
     if request.method == 'POST':
         username=request.POST.get('username')
         email=request.POST.get('email')
