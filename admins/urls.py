@@ -11,7 +11,11 @@ urlpatterns = [
     path('category',views.handlecategory,name='category'),
     path('add_category',views.add_category,name='add_category'),
     path('edit_category/<int:id>',views.edit_category,name='edit_category'),
-    path('delete_category/<int:id>',views.delete_category,name='delete_category')
-    
+    path('delete_category/<int:id>',views.delete_category,name='delete_category'),
+    path('products',views.products,name='products'),
+    path('add_products',views.add_products,name='add_products'),
+    path('edit_products/<int:book_id>',views.edit_products,name='edit_products'),
+    path('delete_products/<int:book_id>',views.delete_products,name='delete_products'),
+    path('logout',views.handlelogout,name='handlelogout'),
    
 ]

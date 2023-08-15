@@ -3,14 +3,16 @@ from logins.models import user_details
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.contrib import messages
-from .models import Category
+from .models import Category,books
+from django.views.decorators.cache import never_cache
 
 
 # Create your views here.
 # def handleadmin(request):
 #     return render(request ,'baseadmin.html')
-
+@never_cache
 def hanglesignin(request):
+    
     if request.method == 'POST':
         email=request.POST['email']
         password =request.POST['password']
@@ -24,10 +26,18 @@ def hanglesignin(request):
             return redirect('index')
         else:
             messages.warning(request,'Not a superuser')
+            return redirect('signin')
+       
+    if  not request.user.is_authenticated:
+       return render(request,"admintemplate/signin.html")
     else:
-        return render(request,'admintemplate/signin.html')
-
+    
+        return render(request,"admintemplate/index.html")
+    
+    
+@never_cache
 def hangleindex(request):
+   
     return render(request,"admintemplate/index.html")
 
 def handleuser(request):
@@ -88,6 +98,87 @@ def delete_category(request,id):
     cat_obj = Category.objects.get( id=id)
     cat_obj.delete()
     return redirect('category')
+
+def products(request):
+    book_details=books.objects.all()
+    return render(request,'admintemplate/product.html',{'books_items':book_details})
+
+def add_products(request):
+    
+    if request.method == "POST":
+        title = request.POST.get('book_title')
+        category_name= request.POST.get('book_categories')
+        author = request.POST.get('book_author')
+        active = request.POST.get('book_active')
+        handleactive = True if active == 'active' else False
+        price = request.POST.get('book_price')
+        offer_price = request.POST.get('book_offer_price')
+        quantity = request.POST.get('book_quantity')
+        discount_percent = request.POST.get('book_discount')
+        image = request.FILES.get('book_image')
+        try:
+            category = Category.objects.get(name=category_name)
+
+            new_product = books.objects.create(
+                title=title,
+                categories=category,
+                author=author,
+                active=handleactive,
+                price=price,
+                offer_price=offer_price,
+                quantity=quantity,
+                discount_percent=discount_percent,
+                image=image,
+            )
+            new_product.save()
+            return redirect('products')
+        except Category.DoesNotExist:
+            messages.ERROR(request,"invalid cateroy")
+            return redirect('add_products')
+    else:
+        all_categories = Category.objects.all()
+        return render(request,'admintemplate/addproduct.html',{'categories':all_categories})
+    
+def edit_products(request,book_id):
+    edit_books = books.objects.get(id=book_id)
+    
+    if request.method == "POST":
+        title = request.POST.get('edit_title')
+        category_name= request.POST.get('edit_categories')
+        author = request.POST.get('edit_author')
+        active = request.POST.get('edit_active')
+        handleactive = True if active == 'active' else False
+        price = request.POST.get('edit_price')
+        offer_price = request.POST.get('edit_offer_price')
+        quantity = request.POST.get('edit_quantity')
+        discount_percent = request.POST.get('edit_discount')
+        image = request.FILES.get('edit_image')
+        
+        category = Category.objects.get(name=category_name)
+        edit_books.title = title
+        edit_books.categories = category
+        edit_books.author = author
+        edit_books.active = handleactive
+        edit_books.price = price
+        edit_books.offer_price = offer_price
+        edit_books.quantity = quantity
+        edit_books.discount_percent = discount_percent
+        edit_books.image = image
+        edit_books.save()
+        return redirect('products')
+    
+    cat=Category.objects.all()
+    
+    return render(request, 'admintemplate/editproduct.html', {'edit_book': edit_books, 'categories': cat})
+def delete_products(request,book_id):
+    delete_pro = books.objects.get(id=book_id)
+    delete_pro.delete()
+    return redirect('products')
+def handlelogout(request):
+    auth.logout(request)
+    return redirect('signin')
+    
+
 
 
     
