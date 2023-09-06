@@ -8,11 +8,11 @@
         <div class="form-group d-inline-flex" style="width: 70%;">
             <div>
                 <label for="name">Title</label>
-                <input type="text" class="form-control" id="name" name="edit_title" style="width: 300px;" required>
+                <input type="text" class="form-control" id="name" name="edit_title" value="{{edit_book.title}}" style="width: 300px;" required>
             </div>
             <div style="margin-left: 100px;">
                 <label for="categories">Categories</label>
-                <select class="form-control" id="categories" name="edit_categories" style="width: 300px;" required>
+                <select class="form-control" id="categories" name="edit_categories"  value="{{edit_book.categories}}" style="width: 300px;" required>
                     <option value="">Select a Category</option>
                     {% for cat in categories %}
                     <option value="{{ cat.name}}">{{ cat.name}}</option>
@@ -23,11 +23,11 @@
         <div class="form-group d-inline-flex" style="width: 70%;">
             <div>
                 <label for="name">Author</label>
-                <input type="text" class="form-control" id="size" name="edit_author" style="width: 300px;" required>
+                <input type="text" class="form-control" id="size" name="edit_author" value="{{edit_book.author}}" style="width: 300px;" required>
             </div>
             <div style="margin-left: 100px;">
                 <label for="status">Status</label>
-                <select class="form-control" id="status" name="edit_active" style="width: 300px;" required>
+                <select class="form-control" id="status" name="edit_active" value="{{edit_book.active}}"  style="width: 300px;"  required>
                     <option value="active">Active</option>
                     <option value="inactive">Inactive</option>
                 </select>
@@ -36,37 +36,42 @@
         <div class="form-group d-inline-flex" style="width: 70%;">
             <div>
                 <label for="name">Price</label>
-                <input type="text" class="form-control" id="price" name="edit_price" style="width: 300px;" required>
+                <input type="text" class="form-control" id="price" name="edit_price"value="{{edit_book.price}}" style="width: 300px;" required>
             </div>
             <div style="margin-left: 100px;">
                 <label for="category">Offer Price</label>
-                <input type="text" class="form-control" id="offer_price" name="edit_offer_price" style="width: 300px;">
+                <input type="text" class="form-control" id="offer_price" name="edit_offer_price" value="{{edit_book.offer_price}}" style="width: 300px;" >
             </div>
         </div>
         <div class="form-group d-inline-flex" style="width: 70%;">
             <div>
                 <label for="name">Quantity</label>
-                <input type="text" class="form-control" id="quantity" name="edit_quantity" style="width: 300px;" required>
+                <input type="text" class="form-control" id="quantity" name="edit_quantity" value="{{edit_book.quantity}}" style="width: 300px;" required>
             </div>
             <div style="margin-left: 100px;">
                 <label for="category">Discount (%)</label>
-                <input type="text" class="form-control" id="discount" name="edit_discount" style="width: 300px;">
+                <input type="text" class="form-control" id="discount" name="edit_discount" value="{{edit_book.discount_percent}}" style="width: 300px;">
             </div>
         </div>
       
 
         <div class="form-group d-inline-flex" style="width: 70%;">
-            <div class="mt-4">
-                <a href=""><button type="submit" class="btn btn-primary">Add Product</button></a>
+            <div>
+                <label for="category">Product discription</label>
+                {% comment %} <textarea class="form-control" id="description" name="edit_prod_description" value="{{edit_book.discription}}" rows="4" style="width: 300px;" required></textarea> {% endcomment %}
+                <textarea class="form-control" id="description" name="edit_prod_description" style="width: 300px;" rows="4" required>{{edit_book.discription}}</textarea>
             </div>
-            <div style="position: relative;left:288px">
+           
+            <div style="position: relative;left:100px">
                 <label for="image" class="col-md-2 col-form-label">Image</label>
                 <div class="col-md-4">
-                    <input type="file" id="image" name="edit_image" accept="image/*" required>
+                    <input type="file" id="image" name="edit_image" value="{{edit_book.image}}" accept="image/*" required>
                 </div>
             </div>
         </div>
-        
+        <div class="mt-4">
+            <a href=""><button type="submit" class="btn btn-primary">Add Product</button></a>
+        </div>
     </form>
     
 </div>

@@ -19,6 +19,18 @@ class books(models.Model):
     quantity = models.PositiveIntegerField()
     discount_percent = models.PositiveIntegerField(default=0)
     image = models.ImageField(upload_to='books/', null=True, blank=True)
+    deleted = models.BooleanField(default=False)  
+    discription = models.TextField()
+    
+    
+    def soft_delete(self):
+        self.deleted = True
+        self.save()
+    
+    def undelete(self):
+        self.deleted = False
+        self.save()
+    
     
     
     def __str__(self):

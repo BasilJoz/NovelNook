@@ -16,6 +16,7 @@ urlpatterns = [
     path('add_products',views.add_products,name='add_products'),
     path('edit_products/<int:book_id>',views.edit_products,name='edit_products'),
     path('delete_products/<int:book_id>',views.delete_products,name='delete_products'),
+    path('undelete_products/<int:book_id>',views.undelete_products,name='undelete_products'),
     path('logout',views.handlelogout,name='handlelogout'),
    
 ]

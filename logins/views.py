@@ -10,7 +10,9 @@ from django.contrib.auth.hashers import make_password
 
 # Create your views here.
 def home(request):
-    book =  books.objects.all()
+    print(request.user,'newone')
+    book =  books.objects.filter(deleted = False)[:4]
+    
     
     return render(request, "usertemplate/home.html",{'best_seller':book})
 
@@ -93,8 +95,20 @@ def Otp(request, phone, id):
     else:
         return render(request, "usertemplate/otp.html", {"phone": phone, "id": id})
 
+def handleshop(request):
+    book =  books.objects.filter(deleted = False)
+    
+    
+    return render(request, "usertemplate/shop.html",{'best_seller':book})
+
+    # return render(request,"usertemplate/shop.html")
 
 def Logout(request):
     if user_details.is_authenticated:
         auth.logout(request)
         return redirect("login")
+    
+def hanldesingleproduct(request,product_id):
+    product = books.objects.get(id=product_id)
+    
+    return render(request,"usertemplate/singlepage.html",{'products':product})

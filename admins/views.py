@@ -14,12 +14,15 @@ from django.views.decorators.cache import never_cache
 def hanglesignin(request):
     
     if request.method == 'POST':
-        email=request.POST['email']
+        username=request.POST['email']
+        print(username)
         password =request.POST['password']
         try:
-            user = User.objects.get(email=email)
+            user = user_details.objects.get(username=username)
+            print(user)
             password_matched = user.check_password(password)
         except:
+            print("dddd")
             return redirect('signin')
         if user and password_matched and user.is_superuser:
             auth.login(request,user)
@@ -41,7 +44,7 @@ def hangleindex(request):
     return render(request,"admintemplate/index.html")
 
 def handleuser(request):
-    obj=user_details.objects.all()
+    obj=user_details.objects.exclude(is_superuser = True)
     return render(request,'admintemplate/users.html',{'adm_user':obj})
 
 def handleblock(request,id):
@@ -100,8 +103,9 @@ def delete_category(request,id):
     return redirect('category')
 
 def products(request):
-    book_details=books.objects.all()
-    return render(request,'admintemplate/product.html',{'books_items':book_details})
+    active_books = books.objects.all()
+    
+    return render(request,'admintemplate/product.html',{'books_items':active_books})
 
 def add_products(request):
     
@@ -116,6 +120,7 @@ def add_products(request):
         quantity = request.POST.get('book_quantity')
         discount_percent = request.POST.get('book_discount')
         image = request.FILES.get('book_image')
+        discription =request.POST.get('prod_description')
         try:
             category = Category.objects.get(name=category_name)
 
@@ -129,6 +134,7 @@ def add_products(request):
                 quantity=quantity,
                 discount_percent=discount_percent,
                 image=image,
+                discription=discription,
             )
             new_product.save()
             return redirect('products')
@@ -140,8 +146,8 @@ def add_products(request):
         return render(request,'admintemplate/addproduct.html',{'categories':all_categories})
     
 def edit_products(request,book_id):
-    edit_books = books.objects.get(id=book_id)
-    
+    edit_books = books.objects.get(id=book_id, deleted=False)
+     
     if request.method == "POST":
         title = request.POST.get('edit_title')
         category_name= request.POST.get('edit_categories')
@@ -153,6 +159,7 @@ def edit_products(request,book_id):
         quantity = request.POST.get('edit_quantity')
         discount_percent = request.POST.get('edit_discount')
         image = request.FILES.get('edit_image')
+        discription = request.POST.get('edit_prod_description')
         
         category = Category.objects.get(name=category_name)
         edit_books.title = title
@@ -164,24 +171,30 @@ def edit_products(request,book_id):
         edit_books.quantity = quantity
         edit_books.discount_percent = discount_percent
         edit_books.image = image
+        edit_books.discription = discription
         edit_books.save()
         return redirect('products')
     
     cat=Category.objects.all()
-    
+    print(edit_books.discription)
     return render(request, 'admintemplate/editproduct.html', {'edit_book': edit_books, 'categories': cat})
 def delete_products(request,book_id):
     delete_pro = books.objects.get(id=book_id)
-    delete_pro.delete()
+    delete_pro.soft_delete()
     return redirect('products')
+
+def undelete_products(request,book_id):
+    delete_pro = books.objects.get(id=book_id)
+    delete_pro.undelete()
+    return redirect('products')
+
 def handlelogout(request):
     auth.logout(request)
     return redirect('signin')
+
+
     
 
 
 
     
-    
-    
-
