@@ -132,11 +132,12 @@
                 </div>
                 <div class="col-lg-3 col-md-3">
                     <div class="header__nav__option">
-                        <a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>
-                        <a href="#"><img src="{% static 'img/icon/heart.png'%}" alt=""></a>
-                        <a href="/Logout"><button  type="button" class="btn btn-outline-secondary">Logout</button></a>
+                    
+                        <a class="mt-1" style="color: black;" href="/wishlist"><i class="bi bi-heart  mt-1" style="cursor: pointer; font-size: 22px;"></i></a>
+                        <a href="{% url 'cart' %}" style="text-decoration:none ; color:black;"><i class="bi bi-cart" style="cursor: pointer; font-size: 24px;"></i></a>
+                       <a href="{% url 'userprofile' %}" style="text-decoration:none ; color:black;"> <i class="bi bi-person" style="cursor: pointer; font-size: 25px; margin-left: 20px;" id="profileDropdown"></i></a>
 
-                        
+                     
                     </div>
                 </div>
             </div>

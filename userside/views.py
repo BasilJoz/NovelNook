@@ -4,8 +4,9 @@ from admins.models import books
 from logins.models import user_details
 from logins.models import Address
 from .models import Order,OrderItem
+from django.contrib.auth.decorators import login_required
 # Create your views here.
-
+@login_required(login_url='login')
 def cart(request):
     
     user = request.user
@@ -14,7 +15,7 @@ def cart(request):
     total_price = sum(item.quantity * item.book.price for item in cart_item)
     
     return render(request,'usertemplate/cart.html',{'cart_items':cart_item,'total_price':total_price})
-
+@login_required(login_url='login')
 def add_cart(request,book_id):
     user=request.user
     cart, created = Cart.objects.get_or_create(user=user)
@@ -42,7 +43,7 @@ def delete_cart_item(request, item_id):
 #profile handleing section
 
 
-
+@login_required(login_url='login')
 def userprofile(request):
     user = request.user
     print(user,"ukyfyuuu")

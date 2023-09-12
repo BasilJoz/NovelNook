@@ -6,6 +6,7 @@ from django.contrib import messages
 from .models import Category,books
 from django.views.decorators.cache import never_cache
 from userside.models import Order,OrderItem
+from django.contrib.auth.decorators import login_required
 
 
 
@@ -42,7 +43,7 @@ def hanglesignin(request):
     
     
 @never_cache
-
+@login_required(login_url='signin')
 def hangleindex(request):
    
     return render(request,"admintemplate/index.html")
