@@ -18,5 +18,8 @@ urlpatterns = [
     path('delete_products/<int:book_id>',views.delete_products,name='delete_products'),
     path('undelete_products/<int:book_id>',views.undelete_products,name='undelete_products'),
     path('logout',views.handlelogout,name='handlelogout'),
+    path('userorders',views.userorders,name='userorders'),
+    path('userorderitems/<int:id>',views.userorderitems,name='userorderitems'),
+    path('orderstatus/<int:id>',views.orderstatus,name='orderstatus'),
    
 ]

@@ -112,3 +112,4 @@ def hanldesingleproduct(request,product_id):
     product = books.objects.get(id=product_id)
     
     return render(request,"usertemplate/singlepage.html",{'products':product})
+

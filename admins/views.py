@@ -1,10 +1,13 @@
-from django.shortcuts import render,redirect,HttpResponse
+from django.shortcuts import render,redirect,HttpResponse ,get_object_or_404
 from logins.models import user_details
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.contrib import messages
 from .models import Category,books
 from django.views.decorators.cache import never_cache
+from userside.models import Order,OrderItem
+
+
 
 
 # Create your views here.
@@ -39,6 +42,7 @@ def hanglesignin(request):
     
     
 @never_cache
+
 def hangleindex(request):
    
     return render(request,"admintemplate/index.html")
@@ -194,7 +198,42 @@ def handlelogout(request):
 
 
     
+def userorders(request):
+    
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        return redirect('signin')
 
+    users = user_details.objects.filter(is_superuser=False)
+    orders = Order.objects.filter(user__in=users).order_by('-id')
+
+    return render(request, 'admintemplate/userorders.html', {"orders": orders})
+
+
+def userorderitems(request,id):
+   
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        return redirect('signin')
+
+    order_items = OrderItem.objects.filter(order_id=id).order_by("id")
+
+    return render(request, "admintemplate/userorderitems.html", {"order_items": order_items})
+
+    
+def orderstatus(request, id):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        return redirect("'signin'")
+
+    order_items = get_object_or_404(OrderItem, id=id)
+
+    if request.method == "POST":
+        order_status = request.POST.get("edited_order_status", "")
+        if order_status:
+            order_items.order_status = order_status
+            order_items.save()
+            return redirect('userorders')
+
+    return render(request, "admintemplate/orderstatus.html", {"order_items": order_items})
+    
 
 
     
