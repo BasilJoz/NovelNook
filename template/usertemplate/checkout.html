@@ -2,7 +2,7 @@
 {% block title %}checkout{% endblock %}
 {% load static %}
 {% block body %}
-<div style="margin-top: 150px;">
+<div style="margin-top: 90px;">
 	<form method="post" action="{% url 'checkout' %}">
 		{% csrf_token %}
 		<div class="container mt-5">
@@ -99,7 +99,7 @@
 										style="margin-right: 10px;"></a>
 								<a href="#"><img src="{% static 'images/master.jpg' %}" alt="MasterCard"></a>
 							</div>
-							<button type="submit" class="cart_total_button btn btn-primary mt-3"
+							<button type="submit" class="cart_total_button btn btn-primary mt-3 mb-5"
 								style="padding: 5px 15px; font-weight: bold;">Place Order</button>
 						</div>
 					</div>

@@ -117,16 +117,16 @@
                                 <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
                                     <div class="product__item">
                                         <div class="product__item__pic set-bg" data-setbg="">
-                                           <a href="{% url 'hanldesingleproduct' best.id %}"> <img class="img-hover" src="{{best.image.url}}" alt="" style="width:70%; "></a>
+                                           <a href="{% url 'hanldesingleproduct' best.id %}"> <img class="img-hover" src="{{best.image.url}}" alt="" style="width:100%; "></a>
                                             <span class="label">Best</span>
                                             <ul class="product__hover">
-                                                <li><a href="#"><img src="{% static 'img/icon/heart.png' %}" alt=""></a></li>
+                                                <!-- <li><a href="#"><img src="{% static 'img/icon/heart.png' %}" alt=""></a></li>
                                                 <li><a href="#"><img src="{% static 'img/icon/compare.png' %}" alt=""> <span>Compare</span></a></li>
-                                                <li><a href="#"><img src="{% static 'img/icon/search.png' %}" alt=""></a></li>
+                                                <li><a href="#"><img src="{% static 'img/icon/search.png' %}" alt=""></a></li> -->
                                             </ul>
                                         </div>
                                         
-                                        <div class="product__item__text">
+                                        <div class="product__item__text" style="margin-top: 20px;">
                                             <h6>{{best.title}}</h6>
                                             <a href="#" class="add-cart">+ Add To Cart</a>
                                             <div class="rating">
@@ -137,7 +137,7 @@
                                                 <i class="fa fa-star-o"></i>
                                             </div>
                                             <h5>{{best.price}}</h5>
-                                            <div class="product__color__select">
+                                            <!-- <div class="product__color__select">
                                                 <label for="pc-1">
                                                     <input type="radio" id="pc-1">
                                                 </label>
@@ -147,7 +147,7 @@
                                                 <label class="grey" for="pc-3">
                                                     <input type="radio" id="pc-3">
                                                 </label>
-                                            </div>
+                                            </div> -->
                                         </div>
                     
                                     </div>
@@ -183,8 +183,8 @@
 
     <style>
         .img-hover:hover{
-            width: 250px;
-            height: 250px;
+            scale: 110%;
+            transition: 0.5s ease-in-out;
             cursor: pointer;
         }
     </style>

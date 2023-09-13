@@ -4,9 +4,13 @@
 {% load static %}
 <div class="container mb-5">
     <div class="row">
-        <div class="col-lg-2 d-none d-md-block"></div>
+        <div class="col-lg-2 d-none d-md-block  "></div>
         <div class="col-lg-5 col-md-12" style="margin-top: 80px;">
-            <div id="variantImage" class="product-image" style="background-image: url('{{ products.image.url }}');"></div>
+            <div class="magnify">
+            <div id="variantImage" class="product-image">
+                <img src="{{ products.image.url }}" alt="">
+            </div>
+        </div>
         </div>
         <div class="col-lg-5 col-md-12 d-flex justify-content-center" style="margin-top: 80px;">
             <div class="product-details">
@@ -87,6 +91,10 @@
     
     .product-description {
         font-size: 13px;
+    }
+
+    #variantImage{
+        cursor: pointer;
     }
     </style>
 {% endblock body %}
