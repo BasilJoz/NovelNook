@@ -51,10 +51,13 @@
                                 <td class="quantity__item">
                                     <div class="quantity">
                                         <div class="pro-qty-2">
-                                            <input type="text" value="1">
+                                            <input type="number" class="quantity-input" data-item-id="{{ item.id }}" value="{{ item.quantity }}" min="1">
                                         </div>
                                     </div>
                                 </td>
+                                
+                                
+                                
                                 <td class="cart__price">{{item.book.price}}</td>
                                 <td class="cart__close"> <a href="{% url 'delete_cart_item' item.id %}"><i class="fa fa-close"></i></a></td>
                             </tr>
@@ -68,14 +71,14 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="continue__btn">
-                            <a href="#">Continue Shopping</a>
+                            <a href="{% url 'handleshop' %}">Continue Shopping</a>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6">
+                    <!-- <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="continue__btn update__btn">
                             <a href="#"><i class="fa fa-spinner"></i> Update cart</a>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="col-lg-4">
@@ -90,7 +93,7 @@
                     <h6>Cart total</h6>
                     <ul>
                         <li>Subtotal <span>{{total_price}}</span></li>
-                        <li>Total <span>$ 169.50</span></li>
+                        <li>Total <span>{{total_price}}</span></li>
                     </ul>
                     <a href="{% url 'checkout' %}?cart_items=true" class="primary-btn">Proceed to checkout</a>
                 </div>
@@ -98,4 +101,40 @@
         </div>
     </div>
 </section>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Listen to changes in quantity inputs
+        $('.quantity-input').on('change', function () {
+            var newQuantity = $(this).val();
+            var itemId = $(this).data('item-id');
+
+            console.log('New Quantity:', newQuantity);
+            console.log('Item ID:', itemId);
+
+            // Use AJAX to update the cart item quantity
+            $.ajax({
+                type: 'POST',
+                url: '{% url "update_cart_item_quantity" 0 %}', // Update with the correct URL
+                data: {
+                    'item_id': itemId,
+                    'new_quantity': newQuantity,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function (response) {
+                    console.log('AJAX Success:', response);
+                    // Handle success (if needed)
+                },
+                error: function (xhr, errmsg, err) {
+                    console.log('AJAX Error:', errmsg);
+                    // Handle errors (if needed)
+                }
+            });
+        });
+    });
+</script>
+
+
+
 {% endblock body %}

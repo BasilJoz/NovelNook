@@ -1,49 +1,42 @@
 {% extends 'baseuser.html' %}
 {% block title %}Order Summary{% endblock title %}
 {% block body %}
-<div style="margin-top: 180px">
+<div style="margin-top: 80px">
     <div class="container my-5">
         <div class="row justify-content-center">
             <div class="col-lg-10 col-xl-8">
-                <div class="card" style="border-radius: 10px">
-                    <div class="card-header bg-primary text-white text-center">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-header  text-white text-center" style="background-color:black ;">
                         <h5 class="mb-0 font-weight-bold">ORDER SUMMARY</h5>
                     </div>
                     <div class="card-body">
                         <div class="mb-4">
                             <p class="lead mb-0">
-                                Thank you for your order,
-                                <span class="text-primary">{{username}}</span>
+                                Thank you for your order: <span class="text-dark font-weight-bold">{{ username }} </span >
                             </p>
                         </div>
                         {% for item in order_items %}
                         <!-- Product in Order {{ order.id }} -->
-                        <div class="card mb-4">
+                        <div class="card mb-4 border-0 shadow">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-2">
-                                        {% for img in item.product.images.all %}
-                                        {% if forloop.first %}
-                                        <img src="{{img.image.url}}" style="height: 70px; width: 100px"
-                                            alt="" />
-                                        {% endif %}
-                                        {% endfor %}
+                                        <img src="{{ item.product.image.url }}" class="img-fluid rounded"
+                                             alt="{{ item.product.name }}" />
                                     </div>
-                                    <div class="col-md-3 d-flex align-items-center" style="margin-left: 100px;">
+                                    <div class="col-md-3 d-flex align-items-center">
                                         <p class="mb-0">
-                                            PRODUCT:<br>{{item.product}}
+                                            PRODUCT:<br>{{ item.product.name }}
                                         </p>
                                     </div>
                                     <div class="col-md-2 d-flex align-items-center">
                                         <p class="mb-0 small">
-                                            PRICE: <br />
-                                            ₹{{ item.product.offer_price }}
+                                            PRICE: <br>₹{{ item.product.offer_price }}
                                         </p>
                                     </div>
                                     <div class="col-md-2 d-flex align-items-center">
                                         <p class="mb-0 small">
-                                            QUANTITY: <br />
-                                            {{ item.quantity }}
+                                            QUANTITY: <br>{{ item.quantity }}
                                         </p>
                                     </div>
                                 </div>
@@ -54,34 +47,32 @@
                         <div class="mb-5">
                             <div class="d-flex justify-content-between mt-4">
                                 <h6 class="mb-0 font-weight-bold">PAYMENT TYPE</h6>
-                                {% for order in orders %}
-                                <h6 class="mb-0 fw-bold">{{ order.payment_method }}</h6>
-                                {% endfor %}
+                                <h6 class="mb-0 fw-bold">{{ orders.payment_method }}</h6>
                             </div>
                             <div class="d-flex justify-content-between mt-4">
                                 <h6 class="mb-0 font-weight-bold">SHIPPING ADDRESS</h6>
                                 <p style="margin-top: -5px">
-                                    {{ address.name }}, {{ address.postoffice }}, {{ address.street}}, {{address.city}},
-                                    {{ address.state }},<br />
+                                    {{ address.name }}, {{ address.postoffice }}, {{ address.street }}, {{ address.city }},
+                                    {{ address.state }},<br>
                                     {{ address.country }}, {{ address.pin_code }}.
                                 </p>
                             </div>
                             <div class="d-flex justify-content-between mt-4">
-                                {% for order in orders %}
-                                <h6 class="mb-0 font-weight-bold">SUB TOTAL</h6>
-                                <h6 class="mb-0 fw-bold">₹{{order.total_price}}</h6>
+                                <h6 class="mb-0 font-weight-bold">
+                                    SUBTOTAL
+                                </h6>
+                                <h6 class="mb-0 fw-bold">₹{{ orders.total_price }}</h6>
                             </div>
                             <div class="d-flex justify-content-between mt-4">
                                 <h6 class="mb-0 font-weight-bold">
                                     TOTAL (Including Shipping Charges)
                                 </h6>
-                                <h6 class="mb-0 fw-bold">₹ {{order.total_price_shipping}}</h6>
+                                <h6 class="mb-0 fw-bold">₹{{ orders.total_price_shipping }}</h6>
                             </div>
-                            <hr style="height: 30px; border-color: #333333d0" />
-                            <div class="d-flex justify-content-between mt-4" style="margin-top: 130px">
-                                <h6 class="mb-0 font-weight-bold">AMOUNT TO PAY :</h6>
-                                <h6 class="mb-0 fw-bold">₹ {{order.total_price_shipping}}</h6>
-                                {% endfor %}
+                            <hr class="my-4">
+                            <div class="d-flex justify-content-between mt-4">
+                                <h6 class="mb-0 font-weight-bold">AMOUNT TO PAY:</h6>
+                                <h6 class="mb-0 fw-bold">₹{{ orders.total_price_shipping }}</h6>
                             </div>
                         </div>
                     </div>
@@ -89,5 +80,4 @@
             </div>
         </div>
     </div>
-</div>
 {% endblock %}

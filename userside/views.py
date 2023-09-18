@@ -5,6 +5,7 @@ from logins.models import user_details
 from logins.models import Address
 from .models import Order,OrderItem
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 # Create your views here.
 @login_required(login_url='login')
 def cart(request):
@@ -15,6 +16,36 @@ def cart(request):
     total_price = sum(item.quantity * item.book.price for item in cart_item)
     
     return render(request,'usertemplate/cart.html',{'cart_items':cart_item,'total_price':total_price})
+
+from django.http import JsonResponse
+
+# ...
+
+def update_cart_item_quantity(request, item_id):
+    # Get the cart item
+    cart_item = get_object_or_404(CartItems, id=item_id)
+
+    # Check if the request is a POST request
+    if request.method == 'POST':
+        new_quantity = int(request.POST['new_quantity'])
+
+        # Update the quantity of the cart item
+        if new_quantity > 0:
+            cart_item.quantity = new_quantity
+            cart_item.save()
+
+            # Calculate the updated total price (if needed)
+            cart = cart_item.cart
+            cart_item_list = CartItems.objects.filter(cart=cart)
+            total_price = sum(item.quantity * item.book.price for item in cart_item_list)
+
+            # Return a JSON response with the updated data
+            return JsonResponse({'success': True, 'total_price': total_price})
+
+    # Return a JSON response for errors (if needed)
+    return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+
 @login_required(login_url='login')
 def add_cart(request,book_id):
     user=request.user
@@ -162,7 +193,9 @@ def edit_address(request, edit_id):
         address.save()
 
         next_url = request.GET.get('next', None)
+       
         if next_url:
+            print(next_url)
             return redirect(next_url)
         else:
             return redirect('useraddress')
@@ -200,10 +233,12 @@ def checkout(request):
             total_price = 0
 
             for item in cart_items:
+                print('jhjkghjkgjkgjkgjkg')
                 item.offer_price = item.book.offer_price
                 item.total_price_each = item.offer_price * item.quantity
 
                 total_price += item.total_price_each
+                print(total_price,'jgjggkjghkjgkjgkjgjk')
 
             total_price_shipping = total_price + 50
 
@@ -278,14 +313,15 @@ def order_summary(request, address_id, order_id):
     address = Address.objects.get(id=address_id)
     username = user.username
 
-    orders = Order.objects.filter(id=order_id, address=address)
-    order_items = OrderItem.objects.filter(order=order_id)
+    orders = Order.objects.get(id=order_id, address=address)
+    order_items = OrderItem.objects.filter(order=orders)
 
     context = {
         "address": address,
         "username": username,
         "orders": orders,
         "order_items": order_items,
+        
     }
 
     return render(request, "usertemplate/order_summary.html", context) 
