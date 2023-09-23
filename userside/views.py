@@ -348,6 +348,15 @@ def cancel_order(request, order_id, product_id):
 
     return redirect("my_orders")
 
+def get_cart_item_count(request):
+    if request.user.is_authenticated:
+        user = request.user
+        cart = Cart.objects.get_or_create(user=user)[0]
+        item_count = CartItems.objects.filter(cart=cart).count()
+    else:
+        item_count = 0
+
+    return JsonResponse({'item_count': item_count})
 
 
 

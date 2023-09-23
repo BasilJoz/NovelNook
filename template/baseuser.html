@@ -17,9 +17,8 @@
     </title>
 
     <!-- Google Font -->
-    <link
-        href="{% static 'https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap'%}"
-        rel="stylesheet">
+   
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css'%}" type="text/css">
@@ -33,10 +32,36 @@
     <!-- boot strap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.18.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.18.0/font/bootstrap-icons.css" rel="stylesheet">
+
     <link rel="stylesheet" href="{% static 'css/magnify.css' %}">
 
     <style>
         /* Add your custom CSS styles here */
+        /* Add your custom CSS styles here */
+.cart-icon {
+    position: relative;
+    display: inline-block;
+}
+
+.cart-icon i {
+    cursor: pointer;
+    font-size: 24px;
+    color: black;
+}
+
+.cart-icon .cart-count {
+    position: absolute;
+    top: -2px;
+    right: -8px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 1px 9px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
     </style>
 </head>
 
@@ -75,8 +100,11 @@
                     <div class="header__nav__option">
                         <a class="mt-1" style="color: black;" href="/wishlist"><i class="bi bi-heart  mt-1"
                                 style="cursor: pointer; font-size: 22px;"></i></a>
-                        <a href="{% url 'cart' %}" style="text-decoration:none ; color:black;"><i
-                                class="bi bi-cart" style="cursor: pointer; font-size: 24px;"></i></a>
+                                <a href="{% url 'cart' %}" class="cart-icon">
+                                    <i class="bi bi-cart"></i>
+                                    <span class="cart-count" id="cart-item-count">0</span>
+                                </a>
+                                
                         <a href="{% url 'userprofile' %}" style="text-decoration:none ; color:black;"> <i
                                 class="bi bi-person" style="cursor: pointer; font-size: 25px; margin-left: 20px;"
                                 id="profileDropdown"></i></a>
@@ -98,7 +126,7 @@
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="footer__about">
                         <div class="footer__logo">
-                            <a href="#"><img src="img/footer-logo.png" alt=""></a>
+                            <!-- <a href="#"><img src="img/footer-logo.png" alt=""></a> -->
                         </div>
                         <p>The customer is at the heart of our unique business model, which includes design.</p>
                         <a href="#"><img src="img/payment.png" alt=""></a>
@@ -193,6 +221,34 @@
             }
         });
     </script>
+    <!-- Existing script in base.html -->
+<!-- <script src="your_existing_script.js"></script> -->
+
+<!-- New script for updating cart item count -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Function to update the cart item count
+        function updateCartItemCount() {
+            $.ajax({
+                url: '{% url "get_cart_item_count" %}', // Update with the correct URL
+                dataType: 'json',
+                success: function (data) {
+                    $('#cart-item-count').text(data.item_count);
+                },
+                error: function (xhr, errmsg, err) {
+                    console.log('AJAX Error:', errmsg);
+                }
+            });
+        }
+
+        // Initial update of cart item count when the page loads
+        updateCartItemCount();
+
+        // You can also periodically update the count (e.g., every minute) by calling updateCartItemCount() in a setInterval function.
+    });
+</script>
+
 </body>
 
 </html>

@@ -59,7 +59,12 @@
                                 
                                 
                                 <td class="cart__price">{{item.book.price}}</td>
-                                <td class="cart__close"> <a href="{% url 'delete_cart_item' item.id %}"><i class="fa fa-close"></i></a></td>
+                                <td class="cart__close">
+                                    <a href="#" data-toggle="modal" data-target="#deleteCartItemModal" data-item-id="{{ item.id }}">
+                                        <i class="fa fa-close"></i>
+                                    </a>
+                                </td>
+                                
                             </tr>
                             
                            
@@ -100,8 +105,32 @@
             </div>
         </div>
     </div>
+<!-- Delete Cart Item Modal -->
+<div class="modal fade" id="deleteCartItemModal" tabindex="-1" role="dialog" aria-labelledby="deleteCartItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteCartItemModalLabel">Confirm Deletion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this item from your cart?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="deleteCartItemBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </section>
 
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
@@ -134,6 +163,49 @@
         });
     });
 </script>
+<script>
+
+    $(document).ready(function () {
+        var deleteCartItemModal = $('#deleteCartItemModal');
+        var deleteCartItemBtn = $('#deleteCartItemBtn');
+        var itemToDeleteId = null;
+
+        // When a "Delete" link is clicked
+        $('.cart__close a').click(function () {
+            itemToDeleteId = $(this).data('item-id');
+            deleteCartItemModal.modal('show'); // Show the modal
+        });
+
+        // When the "Delete" button in the modal is clicked
+        deleteCartItemBtn.click(function () {
+            if (itemToDeleteId !== null) {
+                // Construct the URL dynamically
+                var deleteUrl = '/userside/delete_cart_item/' + itemToDeleteId + '/';
+
+                // Use AJAX to delete the cart item
+                $.ajax({
+                    type: 'POST',
+                    url: deleteUrl,
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success: function (response) {
+                        console.log('AJAX Success:', response);
+                        // Handle success (if needed)
+
+                        // Close the modal
+                        deleteCartItemModal.modal('hide');
+                    },
+                    error: function (xhr, errmsg, err) {
+                        console.log('AJAX Error:', errmsg);
+                        // Handle errors (if needed)
+                    }
+                });
+            }
+        });
+    });
+</script>
+
 
 
 
